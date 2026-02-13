@@ -1,0 +1,1422 @@
+/* ============================================================
+   STRANDS - Valentine's Day Theme
+   ============================================================ */
+
+:root {
+    --pink-light: #fff0f3;
+    --pink-soft: #ffccd5;
+    --pink-medium: #ff8fa3;
+    --pink-main: #ff4d6d;
+    --pink-dark: #c9184a;
+    --pink-deeper: #a4133c;
+    --gold: #ffd60a;
+    --gold-soft: #fff3b0;
+    --gold-dark: #e6b800;
+    --bg: #fff5f7;
+    --text: #590d22;
+    --text-light: #800f2f;
+    --white: #ffffff;
+    --selected-bg: #fbb1c1;
+    --wrong-bg: #ffb3b3;
+    --cell-size: min(52px, calc((100vw - 80px) / 6));
+    --red-deep: #8b1a2b;
+    --red-outer: #a4243b;
+    --red-soft: #c45c6a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(180deg, var(--red-deep) 0%, var(--red-outer) 30%, var(--red-soft) 100%);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#app {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    position: relative;
+    background: var(--bg);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================
+   FLOATING HEARTS BACKGROUND
+   ============================================================ */
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(255, 200, 210, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(255, 200, 210, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(255, 180, 200, 0.08) 0%, transparent 50%);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--pink-soft);
+    background: var(--white);
+    position: relative;
+    z-index: 10;
+}
+
+.header-left, .header-right {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-left {
+    left: 16px;
+}
+
+.header-right {
+    right: 16px;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--pink-dark);
+    letter-spacing: -0.5px;
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.icon-btn:hover {
+    background: var(--pink-light);
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ============================================================
+   THEME BANNER
+   ============================================================ */
+
+.theme-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 16px 10px;
+    background: linear-gradient(180deg, var(--white) 0%, var(--bg) 100%);
+}
+
+.theme-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pink-main);
+    margin-bottom: 4px;
+}
+
+.theme-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    padding: 5px 16px;
+    background: linear-gradient(135deg, var(--pink-light), rgba(255, 204, 213, 0.3));
+    border-radius: 20px;
+    border: 1px solid var(--pink-soft);
+}
+
+/* ============================================================
+   COUPLE PHOTO
+   ============================================================ */
+
+.photo-frame {
+    display: flex;
+    justify-content: center;
+    padding: 4px 24px 8px;
+    position: relative;
+}
+
+.couple-photo {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    border-radius: 14px;
+    box-shadow:
+        0 4px 16px rgba(89, 13, 34, 0.15),
+        0 1px 4px rgba(89, 13, 34, 0.1);
+    border: 3px solid var(--pink-soft);
+    outline: 1px solid rgba(255, 77, 109, 0.15);
+    outline-offset: 3px;
+    object-fit: cover;
+    image-orientation: from-image;
+}
+
+/* ============================================================
+   CURRENT WORD DISPLAY
+   ============================================================ */
+
+.current-word {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--pink-dark);
+    min-height: 28px;
+    padding: 4px 16px;
+}
+
+/* ============================================================
+   GAME GRID
+   ============================================================ */
+
+.grid-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
+    position: relative;
+}
+
+.grid {
+    display: grid;
+    gap: 4px;
+    width: 100%;
+    max-width: 350px;
+    touch-action: none;
+    position: relative;
+    z-index: 2;
+}
+
+/* SVG line overlay connecting selected cells */
+.line-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(16px, 4.5vw, 22px);
+    font-weight: 700;
+    color: var(--text);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    letter-spacing: 0.5px;
+    background: transparent;
+}
+
+.cell:hover {
+    background: rgba(255, 77, 109, 0.08);
+}
+
+/* Selected state - pink glow */
+.cell.selected {
+    background: var(--pink-main);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 0 16px rgba(255, 77, 109, 0.4);
+}
+
+/* Selected state ON TOP of already-found cells - much more visible */
+.cell.found.selected,
+.cell.spangram-found.selected {
+    background: rgba(255, 255, 255, 0.85) !important;
+    color: var(--pink-dark) !important;
+    transform: scale(1.12);
+    box-shadow:
+        0 0 0 3px var(--pink-main),
+        0 0 20px rgba(255, 77, 109, 0.5);
+    animation: selectedFoundPulse 0.8s ease infinite;
+}
+
+/* Found theme word - base (fallback) */
+.cell.found {
+    background: var(--pink-medium);
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 77, 109, 0.25);
+}
+
+/* Each theme word gets a unique shade so you can tell them apart */
+.cell.found-color-0 {
+    background: #f28fb0; /* rose pink */
+    box-shadow: 0 2px 8px rgba(242, 143, 176, 0.35);
+}
+.cell.found-color-1 {
+    background: #c9a0dc; /* soft lavender */
+    box-shadow: 0 2px 8px rgba(201, 160, 220, 0.35);
+}
+.cell.found-color-2 {
+    background: #f4845f; /* warm coral */
+    box-shadow: 0 2px 8px rgba(244, 132, 95, 0.35);
+}
+.cell.found-color-3 {
+    background: #e07be0; /* orchid pink */
+    box-shadow: 0 2px 8px rgba(224, 123, 224, 0.35);
+}
+.cell.found-color-4 {
+    background: #ff6b8a; /* hot pink */
+    box-shadow: 0 2px 8px rgba(255, 107, 138, 0.35);
+}
+.cell.found-color-5 {
+    background: #7ec4cf; /* soft teal */
+    color: white;
+    box-shadow: 0 2px 8px rgba(126, 196, 207, 0.35);
+}
+.cell.found-color-6 {
+    background: #d4a0a0; /* dusty rose */
+    box-shadow: 0 2px 8px rgba(212, 160, 160, 0.35);
+}
+
+/* Spangram found - gold/warm */
+.cell.spangram-found {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(255, 214, 10, 0.4);
+}
+
+/* Wrong animation */
+.cell.wrong {
+    animation: shake 0.4s ease;
+    background: var(--wrong-bg);
+}
+
+/* Pop animation */
+.cell.pop {
+    animation: pop 0.3s ease;
+}
+
+/* Hint glow (old single-letter hint) */
+.cell.hint-glow {
+    animation: hintPulse 2s ease;
+}
+
+/* Hint circled - persistent circles around hinted word letters */
+.cell.hint-circled {
+    box-shadow: 0 0 0 3px var(--pink-main), 0 0 12px rgba(255, 77, 109, 0.3);
+    animation: hintAppear 0.4s ease;
+}
+
+/* Non-theme valid word flash */
+.cell.valid-nontheme {
+    background: rgba(100, 200, 150, 0.3);
+    transition: background 0.2s;
+}
+
+/* ============================================================
+   SELECTION LINE (via CSS connecting dots look)
+   ============================================================ */
+
+.cell.selected::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Dot on found+selected cells uses pink for contrast on white bg */
+.cell.found.selected::after,
+.cell.spangram-found.selected::after {
+    background: var(--pink-main);
+    width: 6px;
+    height: 6px;
+}
+
+/* ============================================================
+   WORD LABEL (shows when word is found)
+   ============================================================ */
+
+.word-label {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--pink-main);
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 20;
+    box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+    white-space: nowrap;
+}
+
+.word-label.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.word-label.spangram-label {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--text);
+    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
+}
+
+.word-label.nontheme-label {
+    background: #7ec8a0;
+    color: white;
+    box-shadow: 0 4px 15px rgba(100, 200, 150, 0.3);
+}
+
+.word-label.already-found-label {
+    background: #b0a0a8;
+    color: white;
+    box-shadow: 0 4px 15px rgba(150, 140, 145, 0.3);
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+/* ============================================================
+   BOTTOM BAR
+   ============================================================ */
+
+.bottom-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 20px 24px;
+    background: var(--white);
+    border-top: 1px solid var(--pink-soft);
+}
+
+.bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hint-button {
+    padding: 8px 24px;
+    border-radius: 24px;
+    border: 1.5px solid var(--pink-soft);
+    background: var(--white);
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.hint-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.hint-button.has-hints {
+    background: var(--pink-main);
+    color: white;
+    border-color: var(--pink-main);
+    animation: gentlePulse 2s ease infinite;
+}
+
+.hint-button.has-hints:hover {
+    background: var(--pink-dark);
+}
+
+.hint-button:hover:not(:disabled) {
+    background: var(--pink-light);
+    border-color: var(--pink-medium);
+}
+
+.hint-button:active:not(:disabled) {
+    background: var(--pink-soft);
+}
+
+.progress {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.progress #foundCount {
+    font-weight: 700;
+    color: var(--pink-dark);
+}
+
+.progress #totalCount {
+    font-weight: 700;
+}
+
+.non-theme-counter {
+    font-size: 12px;
+    color: var(--text-light);
+    opacity: 0.7;
+}
+
+/* Hint progress pill */
+.hint-pill-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hint-pill {
+    position: relative;
+    width: 48px;
+    height: 22px;
+    border-radius: 11px;
+    background: var(--pink-light);
+    border: 1.5px solid var(--pink-soft);
+    overflow: hidden;
+}
+
+.hint-pill-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--pink-medium), var(--pink-main));
+    border-radius: 11px;
+    transition: width 0.4s ease;
+}
+
+.hint-pill-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    z-index: 2;
+    line-height: 1;
+}
+
+.hint-pill-fill.earned {
+    background: linear-gradient(90deg, var(--pink-main), var(--gold));
+    transition: width 0.3s ease;
+}
+
+/* Hint earned banner */
+.hint-earned-banner {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: var(--pink-main);
+    color: white;
+    padding: 10px 28px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 50;
+    box-shadow: 0 4px 20px rgba(255, 77, 109, 0.4);
+}
+
+.hint-earned-banner.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   OVERLAYS & MODALS
+   ============================================================ */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(89, 13, 34, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ============================================================
+   WIN SCREEN
+   ============================================================ */
+
+.win-screen {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 40px 32px;
+    text-align: center;
+    max-width: 340px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    box-shadow: 0 20px 60px rgba(89, 13, 34, 0.2);
+}
+
+.overlay.active .win-screen {
+    transform: scale(1);
+}
+
+.win-hearts {
+    font-size: 40px;
+    color: var(--pink-main);
+    margin-bottom: 16px;
+    animation: heartBeat 1.5s ease infinite;
+}
+
+.win-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--pink-dark);
+    margin-bottom: 8px;
+}
+
+.win-screen p {
+    color: var(--text-light);
+    margin-bottom: 24px;
+}
+
+.win-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--pink-main);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.play-again-btn {
+    padding: 12px 40px;
+    border-radius: 30px;
+    border: none;
+    background: linear-gradient(135deg, var(--pink-main), var(--pink-dark));
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+}
+
+.play-again-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
+}
+
+/* ============================================================
+   HELP MODAL
+   ============================================================ */
+
+.help-modal {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 24px;
+    max-width: 380px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(89, 13, 34, 0.2);
+}
+
+.help-modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--pink-dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--pink-light);
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.help-page {
+    display: none;
+}
+
+.help-page.active {
+    display: block;
+}
+
+.help-illustration {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.mini-grid-example {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mini-row {
+    display: flex;
+    gap: 4px;
+}
+
+.mini-cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--pink-light);
+}
+
+.mini-cell.blue {
+    background: var(--pink-medium);
+    color: white;
+}
+
+.mini-cell.yellow-ex {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--text);
+}
+
+.help-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: var(--text);
+}
+
+.help-page ul {
+    padding-left: 20px;
+    color: var(--text-light);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.help-page li {
+    margin-bottom: 8px;
+}
+
+.pink-text {
+    color: var(--pink-main);
+    font-weight: 600;
+}
+
+.gold-text {
+    color: var(--gold-dark);
+    font-weight: 600;
+}
+
+.help-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 16px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--pink-soft);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dot.active {
+    background: var(--pink-dark);
+}
+
+.help-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.help-nav-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 24px;
+    border: 1.5px solid var(--pink-soft);
+    background: var(--white);
+    color: var(--text-light);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.help-nav-btn.primary {
+    background: var(--pink-main);
+    color: white;
+    border-color: var(--pink-main);
+}
+
+.help-nav-btn:hover {
+    background: var(--pink-light);
+}
+
+.help-nav-btn.primary:hover {
+    background: var(--pink-dark);
+    border-color: var(--pink-dark);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-4px); }
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes hintPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.5); }
+    25% { box-shadow: 0 0 20px 8px rgba(255, 77, 109, 0.4); background: var(--pink-soft); }
+    50% { box-shadow: 0 0 20px 8px rgba(255, 77, 109, 0.2); }
+    75% { box-shadow: 0 0 10px 4px rgba(255, 77, 109, 0.3); background: var(--pink-soft); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.05); }
+}
+
+@keyframes hintAppear {
+    0% { box-shadow: 0 0 0 0 var(--pink-main); transform: scale(0.9); }
+    50% { transform: scale(1.1); }
+    100% { box-shadow: 0 0 0 3px var(--pink-main), 0 0 12px rgba(255, 77, 109, 0.3); transform: scale(1); }
+}
+
+@keyframes gentlePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 77, 109, 0); }
+}
+
+@keyframes selectedFoundPulse {
+    0%, 100% {
+        box-shadow:
+            0 0 0 3px var(--pink-main),
+            0 0 20px rgba(255, 77, 109, 0.5);
+    }
+    50% {
+        box-shadow:
+            0 0 0 4px var(--pink-dark),
+            0 0 24px rgba(255, 77, 109, 0.7);
+    }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 380px) {
+    .cell {
+        font-size: 16px;
+    }
+
+    .theme-text {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 768px) {
+    .grid {
+        max-width: 380px;
+    }
+
+    .cell {
+        font-size: 24px;
+    }
+}
+
+/* ============================================================
+   DECORATIVE HEARTS (subtle background)
+   ============================================================ */
+
+body::after {
+    content: '\2665  \2665  \2665  \2665  \2665';
+    position: fixed;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 80px;
+    color: rgba(255, 200, 210, 0.08);
+    pointer-events: none;
+    letter-spacing: 40px;
+    z-index: 0;
+}
+
+/* ============================================================
+   GIFT BUTTON
+   ============================================================ */
+
+.gift-btn {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.gift-btn:hover {
+    transform: scale(1.1);
+    background: var(--pink-light);
+}
+
+.gift-btn svg {
+    width: 26px;
+    height: 26px;
+}
+
+/* ============================================================
+   BOOK SCENE - OVERLAY
+   ============================================================ */
+
+#bookOverlay {
+    z-index: 200;
+}
+
+.book-scene {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.book-close-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 210;
+    opacity: 0;
+    transition: opacity 0.3s ease 1.8s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+#bookOverlay.active .book-close-btn {
+    opacity: 1;
+}
+
+.book-close-btn:hover {
+    background: white;
+    transform: scale(1.1);
+}
+
+/* ============================================================
+   GIFT PACKAGE
+   ============================================================ */
+
+.gift-package {
+    position: absolute;
+    z-index: 5;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gift-box {
+    position: relative;
+    width: 120px;
+    height: 100px;
+}
+
+.gift-body {
+    position: absolute;
+    bottom: 0;
+    width: 120px;
+    height: 70px;
+    background: linear-gradient(180deg, #ff6b8a, #e8475f);
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(200, 50, 80, 0.4);
+    overflow: hidden;
+}
+
+.gift-ribbon-v {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 14px;
+    margin-left: -7px;
+    background: linear-gradient(90deg, #ffd700, #ffed4a, #ffd700);
+    box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
+}
+
+.gift-ribbon-h {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 14px;
+    margin-top: -7px;
+    background: linear-gradient(180deg, #ffd700, #ffed4a, #ffd700);
+    box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
+}
+
+.gift-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: white;
+    z-index: 3;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
+.gift-lid {
+    position: absolute;
+    top: 0;
+    left: -6px;
+    width: 132px;
+    height: 34px;
+    background: linear-gradient(180deg, #ff7e97, #ff6b8a);
+    border-radius: 6px 6px 2px 2px;
+    z-index: 2;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: left bottom;
+    box-shadow: 0 -2px 10px rgba(200, 50, 80, 0.2);
+}
+
+.gift-bow {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bow-loop {
+    position: absolute;
+    width: 24px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ffed4a);
+    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+.bow-loop.left {
+    left: -22px;
+    transform: rotate(-15deg);
+}
+
+.bow-loop.right {
+    right: -22px;
+    transform: rotate(15deg);
+}
+
+.bow-knot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #ffc800;
+    border-radius: 50%;
+    left: 50%;
+    top: 4px;
+    transform: translateX(-50%);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* ============================================================
+   GIFT → OPEN ANIMATION STATES
+   ============================================================ */
+
+/* Step 1: Gift lid opens */
+#bookOverlay.active .gift-package.opening .gift-lid {
+    transform: rotate(-110deg);
+}
+
+/* Step 2: Gift shrinks away */
+#bookOverlay.active .gift-package.shrink {
+    transform: scale(0.3) translateY(60px);
+    opacity: 0;
+}
+
+/* ============================================================
+   BOOK
+   ============================================================ */
+
+.book-wrapper {
+    position: absolute;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.2) translateY(40px);
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.book-wrapper.emerge {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.book {
+    position: relative;
+    display: flex;
+    width: 340px;
+    max-width: 90vw;
+    perspective: 1200px;
+}
+
+.book-spine {
+    position: absolute;
+    left: 50%;
+    top: -4px;
+    bottom: -4px;
+    width: 12px;
+    margin-left: -6px;
+    background: linear-gradient(90deg, #8b4a5e, #a05572, #8b4a5e);
+    border-radius: 2px;
+    z-index: 3;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+.book-page {
+    flex: 1;
+    min-height: 240px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.left-page {
+    background: linear-gradient(135deg, #fdf6f0, #fef9f4, #fdf2ea);
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #e8d5c4;
+    border-right: none;
+    box-shadow: -4px 4px 15px rgba(0,0,0,0.12), inset 2px 0 8px rgba(0,0,0,0.03);
+    transform-origin: right center;
+    animation: none;
+}
+
+.right-page {
+    background: linear-gradient(225deg, #fdf6f0, #fef9f4, #fdf2ea);
+    border-radius: 0 8px 8px 0;
+    border: 1px solid #e8d5c4;
+    border-left: none;
+    box-shadow: 4px 4px 15px rgba(0,0,0,0.12), inset -2px 0 8px rgba(0,0,0,0.03);
+}
+
+/* Page ruled lines */
+.book-page::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
+    background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 29px,
+        rgba(180, 160, 140, 0.12) 29px,
+        rgba(180, 160, 140, 0.12) 30px
+    );
+    pointer-events: none;
+}
+
+/* Page curl effect */
+.left-page::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.04) 50%);
+    border-radius: 0 0 0 8px;
+}
+
+.right-page::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(225deg, transparent 50%, rgba(0,0,0,0.04) 50%);
+    border-radius: 0 0 8px 0;
+}
+
+.page-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
+
+/* ============================================================
+   BOOK TEXT - CURSIVE STYLING
+   ============================================================ */
+
+.book-greeting {
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    font-weight: 600;
+    color: #5a3040;
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+.book-year {
+    font-family: 'Dancing Script', cursive;
+    font-size: 32px;
+    font-weight: 700;
+    color: #c9184a;
+    letter-spacing: 2px;
+}
+
+.book-message {
+    font-family: 'Dancing Script', cursive;
+    font-size: 19px;
+    font-weight: 500;
+    color: #5a3040;
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+
+.book-heart {
+    font-size: 28px;
+    margin-bottom: 14px;
+    animation: heartBeat 1.5s ease infinite;
+}
+
+.book-sign {
+    font-family: 'Dancing Script', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    color: #c9184a;
+    font-style: italic;
+}
+
+/* Page corner decorations */
+.page-decoration {
+    position: absolute;
+    font-size: 18px;
+    color: rgba(200, 160, 140, 0.2);
+    z-index: 1;
+}
+
+.left-deco {
+    top: 12px;
+    left: 12px;
+}
+
+.right-deco {
+    bottom: 12px;
+    right: 12px;
+}
+
+/* ============================================================
+   BOOK OPEN ANIMATION
+   ============================================================ */
+
+/* Book starts closed (pages stacked) */
+.book-wrapper:not(.emerge) .book {
+    transform: rotateX(0);
+}
+
+/* The left page folds open like a book cover */
+.book-wrapper.emerge .left-page {
+    animation: bookOpenLeft 0.8s ease-out 0.4s both;
+}
+
+.book-wrapper.emerge .right-page {
+    animation: bookOpenRight 0.8s ease-out 0.4s both;
+}
+
+@keyframes bookOpenLeft {
+    0% {
+        transform: rotateY(90deg);
+        opacity: 0;
+    }
+    60% {
+        transform: rotateY(-8deg);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes bookOpenRight {
+    0% {
+        transform: rotateY(-90deg);
+        opacity: 0;
+    }
+    60% {
+        transform: rotateY(8deg);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+/* Text fades in after book opens */
+.book-wrapper.emerge .page-content {
+    animation: textFadeIn 0.6s ease-out 1s both;
+}
+
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Sparkle particles around the book */
+.book-wrapper.emerge::before,
+.book-wrapper.emerge::after {
+    content: '✨';
+    position: absolute;
+    font-size: 20px;
+    animation: sparkle 1.5s ease-out 0.6s both;
+    pointer-events: none;
+}
+
+.book-wrapper.emerge::before {
+    top: -20px;
+    left: 20px;
+}
+
+.book-wrapper.emerge::after {
+    top: -10px;
+    right: 20px;
+    animation-delay: 0.8s;
+}
+
+@keyframes sparkle {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-10px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-30px);
+    }
+}

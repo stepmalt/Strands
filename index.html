@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strands</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <div class="header-left">
+                <button class="icon-btn" id="backBtn">&larr;</button>
+            </div>
+            <div class="header-center">
+                <h1 class="logo">Strands</h1>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn gift-btn" id="giftBtn" title="A gift for you">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Box bottom -->
+                        <rect x="3" y="12" width="18" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                        <!-- Box lid -->
+                        <rect x="2" y="9" width="20" height="3.5" rx="1" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                        <!-- Ribbon vertical -->
+                        <line x1="12" y1="9" x2="12" y2="21" stroke="currentColor" stroke-width="1.8"/>
+                        <!-- Ribbon horizontal -->
+                        <line x1="3" y1="13.5" x2="21" y2="13.5" stroke="currentColor" stroke-width="1"/>
+                        <!-- Heart on top -->
+                        <path d="M12 6.5 C12 6.5 10 3 7.5 4 C5 5 5.5 8 12 10.5 C18.5 8 19 5 16.5 4 C14 3 12 6.5 12 6.5Z" fill="#ff4d6d" stroke="#c9184a" stroke-width="0.8"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="helpBtn" title="How to Play">?</button>
+            </div>
+        </header>
+
+        <!-- Theme Banner -->
+        <div class="theme-banner">
+            <span class="theme-label">TODAY'S THEME</span>
+            <span class="theme-text" id="themeText">Our love 💕</span>
+        </div>
+
+        <!-- Couple Photo -->
+        <div class="photo-frame">
+            <img src="couple-photo.jpg" alt="Us" class="couple-photo">
+        </div>
+
+        <!-- Current Word Display -->
+        <div class="current-word" id="currentWord"></div>
+
+        <!-- Game Grid -->
+        <div class="grid-container">
+            <div class="grid" id="grid"></div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="bottom-row">
+                <button class="hint-button" id="hintButton" disabled>Hint</button>
+                <div class="progress" id="progress">
+                    <span id="foundCount">0</span> of <span id="totalCount">7</span> theme words found.
+                </div>
+            </div>
+            <div class="hint-pill-row">
+                <div class="hint-pill">
+                    <div class="hint-pill-fill" id="hintPillFill"></div>
+                    <span class="hint-pill-icon">💡</span>
+                </div>
+                <span class="non-theme-counter" id="nonThemeCount">2 more words for a hint</span>
+            </div>
+        </div>
+
+        <!-- Win Screen -->
+        <div class="overlay" id="winOverlay">
+            <div class="win-screen">
+                <div class="win-hearts">&hearts; &hearts; &hearts;</div>
+                <h2>You did it!</h2>
+                <p>You found all the theme words!</p>
+                <div class="win-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="winHints">0</span>
+                        <span class="stat-label">Hints used</span>
+                    </div>
+                </div>
+                <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div class="overlay" id="helpOverlay">
+            <div class="help-modal">
+                <button class="close-btn" id="closeHelpBtn">&times;</button>
+                <h2>How to Play</h2>
+                <div class="help-pages">
+                    <div class="help-page active" data-page="0">
+                        <div class="help-illustration">
+                            <div class="mini-grid-example">
+                                <div class="mini-row"><span class="mini-cell blue">O</span><span class="mini-cell blue">O</span><span class="mini-cell">P</span><span class="mini-cell">T</span></div>
+                                <div class="mini-row"><span class="mini-cell">N</span><span class="mini-cell blue">S</span><span class="mini-cell">L</span><span class="mini-cell">E</span></div>
+                                <div class="mini-row"><span class="mini-cell">F</span><span class="mini-cell blue">H</span><span class="mini-cell">U</span><span class="mini-cell">M</span></div>
+                                <div class="mini-row"><span class="mini-cell">B</span><span class="mini-cell blue">I</span><span class="mini-cell">T</span><span class="mini-cell">P</span></div>
+                            </div>
+                        </div>
+                        <p class="help-title">Find theme words to fill the board.</p>
+                        <ul>
+                            <li>Theme words stay highlighted in <span class="pink-text">pink</span> when found.</li>
+                            <li>Tap letters one by one or drag to connect them. Tap the last letter again to submit.</li>
+                            <li>Words must be at least three letters.</li>
+                            <li>Theme words fill the board entirely. No theme words overlap.</li>
+                            <li><em>Some of the theme words may not be actual words, they may be our little -isms. 👀 🤭</em></li>
+                        </ul>
+                    </div>
+                    <div class="help-page" data-page="1">
+                        <div class="help-illustration">
+                            <div class="mini-grid-example">
+                                <div class="mini-row"><span class="mini-cell yellow-ex">I</span><span class="mini-cell yellow-ex">L</span><span class="mini-cell yellow-ex">O</span><span class="mini-cell yellow-ex">V</span></div>
+                                <div class="mini-row"><span class="mini-cell">N</span><span class="mini-cell">A</span><span class="mini-cell yellow-ex">E</span><span class="mini-cell yellow-ex">Y</span></div>
+                                <div class="mini-row"><span class="mini-cell">F</span><span class="mini-cell">T</span><span class="mini-cell yellow-ex">O</span><span class="mini-cell yellow-ex">U</span></div>
+                                <div class="mini-row"><span class="mini-cell">B</span><span class="mini-cell">E</span><span class="mini-cell">P</span><span class="mini-cell">S</span></div>
+                            </div>
+                        </div>
+                        <p class="help-title">Find the "spangram."</p>
+                        <ul>
+                            <li>The spangram describes the puzzle's theme and touches two opposite sides of the board. It may be one or more words.</li>
+                            <li>The spangram highlights in <span class="gold-text">gold</span> when found.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="help-dots">
+                    <span class="dot active" data-dot="0"></span>
+                    <span class="dot" data-dot="1"></span>
+                </div>
+                <div class="help-nav">
+                    <button class="help-nav-btn" id="helpBackBtn">Back</button>
+                    <button class="help-nav-btn primary" id="helpNextBtn">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Valentine's Book Overlay -->
+        <div class="overlay" id="bookOverlay">
+            <div class="book-scene" id="bookScene">
+                <!-- Gift Package -->
+                <div class="gift-package" id="giftPackage">
+                    <div class="gift-box">
+                        <div class="gift-lid">
+                            <div class="gift-bow">
+                                <div class="bow-loop left"></div>
+                                <div class="bow-loop right"></div>
+                                <div class="bow-knot"></div>
+                            </div>
+                        </div>
+                        <div class="gift-body">
+                            <div class="gift-ribbon-v"></div>
+                            <div class="gift-ribbon-h"></div>
+                            <div class="gift-heart">&#10084;</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book -->
+                <div class="book-wrapper" id="bookWrapper">
+                    <div class="book" id="book">
+                        <div class="book-spine"></div>
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <p class="book-greeting">Happy<br>Valentine's Day,<br>my love.</p>
+                                <p class="book-year">2026</p>
+                            </div>
+                            <div class="page-decoration left-deco">&#10047;</div>
+                        </div>
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <p class="book-message">You're my everything, and I love ending the day stranding with you.</p>
+                                <p class="book-heart">&#10084;&#65039;</p>
+                                <p class="book-sign">Love, Stephanie.</p>
+                            </div>
+                            <div class="page-decoration right-deco">&#10047;</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Close button -->
+                <button class="book-close-btn" id="closeBookBtn">&times;</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dictionary.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
