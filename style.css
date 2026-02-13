@@ -43,6 +43,7 @@ body {
     -webkit-user-select: none;
 }
 
+
 #app {
     width: 100%;
     max-width: 420px;
@@ -908,6 +909,184 @@ header {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* Mobile: fit everything on screen without scrolling */
+@media (max-height: 850px) {
+    #app {
+        height: 100dvh;
+        max-height: 100dvh;
+        overflow: hidden;
+    }
+
+    .photo-frame {
+        padding: 2px 24px 4px;
+    }
+
+    .couple-photo {
+        max-width: 200px;
+    }
+
+    .theme-banner {
+        padding: 8px 16px 6px;
+    }
+
+    .current-word {
+        min-height: 24px;
+        padding: 2px 16px;
+    }
+
+    .grid-container {
+        min-height: 0;
+    }
+
+    .grid {
+        grid-template-rows: repeat(8, 1fr);
+        height: 100%;
+    }
+
+    .cell {
+        aspect-ratio: auto;
+    }
+
+    .bottom-bar {
+        padding: 8px 16px 16px;
+        gap: 4px;
+    }
+}
+
+@media (max-height: 750px) {
+    #app {
+        height: 100dvh;
+        max-height: 100dvh;
+        overflow: hidden;
+    }
+
+    header {
+        padding: 8px 16px;
+    }
+
+    .theme-banner {
+        padding: 6px 16px 4px;
+    }
+
+    .theme-label {
+        font-size: 9px;
+        margin-bottom: 2px;
+    }
+
+    .theme-text {
+        font-size: 13px;
+        padding: 3px 12px;
+    }
+
+    .photo-frame {
+        padding: 2px 24px 4px;
+    }
+
+    .couple-photo {
+        max-width: 160px;
+        border-radius: 10px;
+        border-width: 2px;
+        outline-offset: 2px;
+    }
+
+    .current-word {
+        font-size: 15px;
+        min-height: 22px;
+        padding: 2px 16px;
+    }
+
+    .grid-container {
+        padding: 2px 16px;
+        min-height: 0;
+    }
+
+    .grid {
+        gap: 2px;
+        height: 100%;
+        grid-template-rows: repeat(8, 1fr);
+    }
+
+    .cell {
+        aspect-ratio: auto;
+        font-size: clamp(14px, 3.8vw, 18px);
+    }
+
+    .bottom-bar {
+        padding: 6px 16px 12px;
+        gap: 4px;
+    }
+
+    .hint-button {
+        padding: 6px 16px;
+        font-size: 13px;
+    }
+
+    .progress {
+        font-size: 12px;
+    }
+
+    .non-theme-counter {
+        font-size: 11px;
+    }
+
+    .hint-pill {
+        width: 40px;
+        height: 18px;
+    }
+}
+
+/* Even smaller phones (e.g. iPhone SE, 667px tall) */
+@media (max-height: 680px) {
+    .theme-banner {
+        padding: 4px 16px 2px;
+    }
+
+    .theme-label {
+        font-size: 8px;
+        margin-bottom: 1px;
+    }
+
+    .theme-text {
+        font-size: 12px;
+        padding: 2px 10px;
+    }
+
+    .photo-frame {
+        padding: 2px 24px 2px;
+    }
+
+    .couple-photo {
+        max-width: 120px;
+    }
+
+    .current-word {
+        font-size: 14px;
+        min-height: 18px;
+        padding: 1px 16px;
+    }
+
+    .grid-container {
+        padding: 1px 14px;
+    }
+
+    .grid {
+        gap: 1px;
+    }
+
+    .cell {
+        font-size: clamp(12px, 3.5vw, 16px);
+    }
+
+    .bottom-bar {
+        padding: 4px 14px 8px;
+        gap: 2px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+}
 
 @media (max-width: 380px) {
     .cell {
