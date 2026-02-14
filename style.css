@@ -418,8 +418,16 @@ header {
 
 /* Hint circled - persistent circles around hinted word letters */
 .cell.hint-circled {
-    box-shadow: 0 0 0 3px var(--pink-main), 0 0 12px rgba(255, 77, 109, 0.3);
+    box-shadow: 0 0 0 2px rgba(255, 77, 109, 0.3), 0 0 6px rgba(255, 77, 109, 0.15);
     animation: hintAppear 0.4s ease;
+}
+
+/* Hint pulse - the "active" letter in the looping sequential animation */
+.cell.hint-pulse {
+    background: rgba(255, 204, 213, 0.55) !important;
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(255, 77, 109, 0.25);
+    transition: all 0.3s ease;
 }
 
 /* Non-theme valid word flash */
@@ -593,56 +601,6 @@ header {
 
 .progress #totalCount {
     font-weight: 700;
-}
-
-.non-theme-counter {
-    font-size: 12px;
-    color: var(--text-light);
-    opacity: 0.7;
-}
-
-/* Hint progress pill */
-.hint-pill-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.hint-pill {
-    position: relative;
-    width: 48px;
-    height: 22px;
-    border-radius: 11px;
-    background: var(--pink-light);
-    border: 1.5px solid var(--pink-soft);
-    overflow: hidden;
-}
-
-.hint-pill-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--pink-medium), var(--pink-main));
-    border-radius: 11px;
-    transition: width 0.4s ease;
-}
-
-.hint-pill-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 12px;
-    z-index: 2;
-    line-height: 1;
-}
-
-.hint-pill-fill.earned {
-    background: linear-gradient(90deg, var(--pink-main), var(--gold));
-    transition: width 0.3s ease;
 }
 
 /* Hint earned banner */
@@ -1123,14 +1081,6 @@ header {
         font-size: 12px;
     }
 
-    .non-theme-counter {
-        font-size: 11px;
-    }
-
-    .hint-pill {
-        width: 40px;
-        height: 18px;
-    }
 }
 
 /* Even smaller phones (e.g. iPhone SE, 667px tall) */

@@ -83,6 +83,9 @@ let hintsUsed = 0;             // total hints used
 let isDragging = false;
 let totalWords = WORDS.length;
 let revealedWords = [];        // words whose letters are circled as hints
+let currentHintWord = null;    // the word currently being animated by hint
+let hintLoopInterval = null;   // interval ID for the looping hint animation
+let hintLoopIndex = 0;         // current letter index in the hint loop
 
 let svgOverlay = null;
 let dragThreshold = 8; // pixels before we consider it a drag vs tap
@@ -264,6 +267,9 @@ function trySelectCell(row, col) {
         const last = selectedCells[selectedCells.length - 1];
         if (!isAdjacent(last, { row, col })) return false;
     }
+
+    // Stop the hint loop animation as soon as user starts tracing
+    if (hintLoopInterval) stopHintLoop();
 
     selectedCells.push({ row, col });
     cellData.selected = true;
@@ -534,12 +540,18 @@ function submitWord() {
         const wordIndex = WORDS.filter(w => !w.isSpangram).indexOf(themeMatch);
         const colorClass = themeMatch.isSpangram ? 'spangram-found' : `found found-color-${wordIndex % 7}`;
 
+        // Stop hint loop if this is the currently-hinted word
+        if (currentHintWord && currentHintWord.word === themeMatch.word) {
+            stopHintLoop();
+            currentHintWord = null;
+        }
+
         // Always highlight the DEFINED path cells (for correct board coverage)
         const pathCells = themeMatch.path;
         pathCells.forEach(([r, c]) => {
             grid[r][c].found = true;
             grid[r][c].hinted = false;
-            grid[r][c].element.classList.remove('selected', 'hint-circled');
+            grid[r][c].element.classList.remove('selected', 'hint-circled', 'hint-pulse');
             colorClass.split(' ').forEach(cls => grid[r][c].element.classList.add(cls));
             if (themeMatch.isSpangram) {
                 grid[r][c].spangram = true;
@@ -672,7 +684,22 @@ function showEarnedHint() {
 function useHint() {
     if (hintCharges <= 0) return;
 
-    // Find an unfound, unrevealed theme word
+    // Stage 2: If there's already a circled (stage 1) word that's unfound,
+    // use this hint to start the looping letter-by-letter animation
+    if (currentHintWord && !foundWords.includes(currentHintWord.word) && !hintLoopInterval) {
+        hintCharges--;
+        hintsUsed++;
+        updateHintButton();
+        startHintLoop(currentHintWord);
+        return;
+    }
+
+    // If already looping on an unfound word, don't consume another charge
+    if (currentHintWord && !foundWords.includes(currentHintWord.word) && hintLoopInterval) {
+        return;
+    }
+
+    // Stage 1: Circle all letters of the next unfound word
     const target = WORDS.find(w =>
         !foundWords.includes(w.word) && !revealedWords.includes(w.word)
     );
@@ -683,13 +710,61 @@ function useHint() {
     revealedWords.push(target.word);
     updateHintButton();
 
-    // Circle all letters of this word
-    target.path.forEach(([r, c], i) => {
-        setTimeout(() => {
-            grid[r][c].hinted = true;
-            grid[r][c].element.classList.add('hint-circled');
-        }, i * 80);
+    // Just circle all the letters at once — no looping animation yet
+    currentHintWord = target;
+    target.path.forEach(([r, c]) => {
+        grid[r][c].hinted = true;
+        grid[r][c].element.classList.add('hint-circled');
     });
+}
+
+function startHintLoop(target) {
+    // Clear any existing hint loop
+    stopHintLoop();
+
+    hintLoopIndex = 0;
+
+    // Animate letters one at a time in sequence, looping
+    function pulseNext() {
+        if (!currentHintWord || foundWords.includes(currentHintWord.word)) {
+            stopHintLoop();
+            return;
+        }
+
+        const path = currentHintWord.path;
+
+        // Remove pulse from ALL cells of this word
+        path.forEach(([r, c]) => {
+            grid[r][c].element.classList.remove('hint-pulse');
+        });
+
+        // Pulse the current letter
+        const [r, c] = path[hintLoopIndex];
+        grid[r][c].element.classList.add('hint-pulse');
+
+        // Advance to next letter (loop back to start)
+        hintLoopIndex = (hintLoopIndex + 1) % path.length;
+    }
+
+    // Pulse the first letter immediately
+    pulseNext();
+
+    // Then continue looping — slower pace (600ms)
+    hintLoopInterval = setInterval(pulseNext, 600);
+}
+
+function stopHintLoop() {
+    if (hintLoopInterval) {
+        clearInterval(hintLoopInterval);
+        hintLoopInterval = null;
+    }
+
+    // Remove pulse class from all hinted cells
+    if (currentHintWord) {
+        currentHintWord.path.forEach(([r, c]) => {
+            grid[r][c].element.classList.remove('hint-pulse');
+        });
+    }
 }
 
 function updateHintButton() {
@@ -766,6 +841,8 @@ function showWin() {
 }
 
 function resetGame() {
+    stopHintLoop();
+    currentHintWord = null;
     foundWords = [];
     nonThemeWordsFound = [];
     hintCharges = 0;
