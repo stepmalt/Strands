@@ -629,23 +629,28 @@ function updateNonThemeCounter() {
 }
 
 function updateHintPill() {
-    const fill = document.getElementById('hintPillFill');
-    if (!fill) return;
+    const btn = document.getElementById('hintButton');
+    if (!btn) return;
     const progress = nonThemeWordsFound.length % 2; // 0 or 1
     // 0 words toward next hint = 0%, 1 word = 50%
     const pct = (progress / 2) * 100;
-    fill.style.width = pct + '%';
+    btn.style.setProperty('--hint-fill', pct + '%');
+
+    if (progress > 0 && hintCharges <= 0) {
+        btn.classList.add('filling');
+    } else {
+        btn.classList.remove('filling');
+    }
 }
 
 function showEarnedHint() {
-    // Flash the pill to full then reset
-    const fill = document.getElementById('hintPillFill');
-    if (fill) {
-        fill.style.width = '100%';
-        fill.classList.add('earned');
+    // Flash the button to full then reset
+    const btn = document.getElementById('hintButton');
+    if (btn) {
+        btn.style.setProperty('--hint-fill', '100%');
         setTimeout(() => {
-            fill.style.width = '0%';
-            fill.classList.remove('earned');
+            btn.style.setProperty('--hint-fill', '0%');
+            btn.classList.remove('filling');
         }, 1200);
     }
 
@@ -692,6 +697,8 @@ function updateHintButton() {
     if (hintCharges > 0) {
         btn.textContent = `Hint (${hintCharges})`;
         btn.classList.add('has-hints');
+        btn.classList.remove('filling');
+        btn.style.setProperty('--hint-fill', '0%');
         btn.disabled = false;
     } else {
         btn.textContent = 'Hint';
@@ -809,7 +816,292 @@ function closeBook() {
 }
 
 // ============================================================
+// ROSE PETALS
+// ============================================================
+
+let petalsActive = false;
+let petalTimeout = null;
+let petalInterval = null;
+let activePetals = []; // track live petals for animation frame
+let petalAnimFrame = null;
+
+const PETAL_COLORS = [
+    '#ff6b8a',  // hot pink
+    '#ff8fa3',  // soft pink
+    '#ffb3c1',  // blush
+    '#f4845f',  // coral
+    '#e07be0',  // orchid
+    '#c9a0dc',  // lavender
+    '#ff4d6d',  // deep pink
+    '#ffa0b4',  // rose
+    '#ff7eb3',  // candy pink
+    '#d4a0a0',  // dusty rose
+];
+
+function getHeaderBottom() {
+    const header = document.querySelector('header');
+    const headerRect = header.getBoundingClientRect();
+    const appRect = document.getElementById('app').getBoundingClientRect();
+    return {
+        y: headerRect.bottom - appRect.top,
+        width: appRect.width,
+    };
+}
+
+function createPetal(container, headerInfo) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    const inner = document.createElement('div');
+    inner.className = 'petal-inner';
+    const shape = document.createElement('div');
+    shape.className = 'petal-shape';
+
+    // Random color
+    const color = PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)];
+    shape.style.background = `linear-gradient(135deg, ${color}, ${color}cc)`;
+
+    // Random size
+    const size = 10 + Math.random() * 8;
+    petal.style.width = size + 'px';
+    petal.style.height = size + 'px';
+
+    // Spin speed
+    const spinDuration = 2 + Math.random() * 3;
+    petal.style.setProperty('--spin-duration', spinDuration + 's');
+
+    inner.appendChild(shape);
+    petal.appendChild(inner);
+    container.appendChild(petal);
+
+    // Spawn along the header bottom line — random x position across the width
+    const startX = Math.random() * headerInfo.width;
+    const startY = headerInfo.y;
+
+    // Start with a slight downward velocity + gentle random horizontal drift
+    const vx = (Math.random() - 0.5) * 40;
+    const vy = 15 + Math.random() * 30; // already moving down — no pause!
+
+    const petalData = {
+        el: petal,
+        x: startX,
+        y: startY,
+        vx: vx,
+        vy: vy,
+        gravity: 35 + Math.random() * 25,
+        swaySpeed: 1.5 + Math.random() * 2,
+        swayAmount: 20 + Math.random() * 30,
+        drag: 0.97 - Math.random() * 0.02,
+        time: 0,
+        opacity: 0,
+        fadeIn: true,
+        size: size,
+    };
+
+    activePetals.push(petalData);
+
+    petal.style.left = startX + 'px';
+    petal.style.top = startY + 'px';
+    petal.style.opacity = '0';
+}
+
+let lastTime = 0;
+
+function animatePetals(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    const dt = Math.min((timestamp - lastTime) / 1000, 0.05); // cap delta
+    lastTime = timestamp;
+
+    const appHeight = document.getElementById('app').offsetHeight;
+
+    for (let i = activePetals.length - 1; i >= 0; i--) {
+        const p = activePetals[i];
+        p.time += dt;
+
+        // Fade in quickly
+        if (p.fadeIn) {
+            p.opacity = Math.min(1, p.opacity + dt * 6);
+            if (p.opacity >= 1) p.fadeIn = false;
+        }
+
+        // Apply gravity
+        p.vy += p.gravity * dt;
+
+        // Apply drag (air resistance)
+        p.vx *= p.drag;
+        p.vy *= p.drag;
+
+        // Sway side to side
+        const sway = Math.sin(p.time * p.swaySpeed) * p.swayAmount * dt;
+
+        // Update position
+        p.x += p.vx * dt + sway;
+        p.y += p.vy * dt;
+
+        // Fade out near the bottom
+        if (p.y > appHeight - 120) {
+            p.opacity = Math.max(0, p.opacity - dt * 1.5);
+        }
+
+        // Update element
+        p.el.style.transform = `translate(${p.x - p.size / 2}px, ${p.y - p.size / 2}px)`;
+        p.el.style.left = '0';
+        p.el.style.top = '0';
+        p.el.style.opacity = p.opacity;
+
+        // Remove if off screen or fully faded
+        if (p.y > appHeight + 20 || p.opacity <= 0) {
+            p.el.remove();
+            activePetals.splice(i, 1);
+        }
+    }
+
+    // Keep animating if there are petals
+    if (activePetals.length > 0 || petalsActive) {
+        petalAnimFrame = requestAnimationFrame(animatePetals);
+    } else {
+        petalAnimFrame = null;
+        lastTime = 0;
+        // All petals gone — hide the stop button
+        hideStopBtn();
+    }
+}
+
+function burstPetals() {
+    const container = document.getElementById('petalContainer');
+    const h = getHeaderBottom();
+
+    // Immediate first wave — petals start falling right away
+    for (let i = 0; i < 14; i++) {
+        createPetal(container, h);
+    }
+
+    // Start animation loop if not running
+    if (!petalAnimFrame) {
+        lastTime = 0;
+        petalAnimFrame = requestAnimationFrame(animatePetals);
+    }
+
+    // Continue sprinkling waves from the header line
+    let waveCount = 0;
+    petalInterval = setInterval(() => {
+        if (!petalsActive || waveCount > 5) {
+            clearInterval(petalInterval);
+            petalInterval = null;
+            return;
+        }
+        const hh = getHeaderBottom();
+        for (let i = 0; i < 5; i++) {
+            createPetal(container, hh);
+        }
+        waveCount++;
+    }, 700);
+}
+
+function showStopBtn() {
+    document.getElementById('petalStopBtn').classList.add('visible');
+}
+
+function hideStopBtn() {
+    document.getElementById('petalStopBtn').classList.remove('visible');
+}
+
+function stopPetals() {
+    petalsActive = false;
+    if (petalTimeout) {
+        clearTimeout(petalTimeout);
+        petalTimeout = null;
+    }
+    if (petalInterval) {
+        clearInterval(petalInterval);
+        petalInterval = null;
+    }
+    // Don't hide stop btn yet — wait until all petals are gone
+}
+
+function clearAllPetals() {
+    // Stop everything AND remove all petals instantly
+    stopPetals();
+    activePetals.forEach(p => p.el.remove());
+    activePetals = [];
+    if (petalAnimFrame) {
+        cancelAnimationFrame(petalAnimFrame);
+        petalAnimFrame = null;
+        lastTime = 0;
+    }
+    hideStopBtn();
+}
+
+function togglePetals() {
+    if (petalsActive) {
+        stopPetals();
+    } else {
+        petalsActive = true;
+        showStopBtn();
+        burstPetals();
+
+        // Auto-stop spawning after 5 seconds
+        petalTimeout = setTimeout(() => {
+            stopPetals();
+        }, 5000);
+    }
+}
+
+// ============================================================
+// PETAL INTERACTION — swipe/hover to push petals around
+// ============================================================
+
+let pointerPos = { x: 0, y: 0 };
+let lastPointerPos = { x: 0, y: 0 };
+let pointerMoving = false;
+
+function updatePointerForPetals(clientX, clientY) {
+    const appRect = document.getElementById('app').getBoundingClientRect();
+    lastPointerPos.x = pointerPos.x;
+    lastPointerPos.y = pointerPos.y;
+    pointerPos.x = clientX - appRect.left;
+    pointerPos.y = clientY - appRect.top;
+    pointerMoving = true;
+
+    // Push nearby petals away from the cursor
+    const pushRadius = 50;
+    const pushStrength = 300;
+
+    for (const p of activePetals) {
+        const dx = p.x - pointerPos.x;
+        const dy = p.y - pointerPos.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < pushRadius && dist > 0) {
+            const force = (1 - dist / pushRadius) * pushStrength;
+            p.vx += (dx / dist) * force;
+            p.vy += (dy / dist) * force;
+        }
+    }
+}
+
+// Mouse move on the petal container area
+document.getElementById('app').addEventListener('mousemove', (e) => {
+    if (activePetals.length > 0) {
+        updatePointerForPetals(e.clientX, e.clientY);
+    }
+});
+
+// Touch move on the petal container
+document.getElementById('app').addEventListener('touchmove', (e) => {
+    if (activePetals.length > 0) {
+        const touch = e.touches[0];
+        updatePointerForPetals(touch.clientX, touch.clientY);
+    }
+}, { passive: true });
+
+// ============================================================
 // START!
 // ============================================================
 
 init();
+
+// Set up petal toggle on logo click
+document.getElementById('logoBtn').addEventListener('click', togglePetals);
+
+// Stop button clears all petals instantly
+document.getElementById('petalStopBtn').addEventListener('click', clearAllPetals);

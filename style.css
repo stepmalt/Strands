@@ -86,7 +86,7 @@ header {
     border-bottom: 1px solid var(--pink-soft);
     background: var(--white);
     position: relative;
-    z-index: 10;
+    z-index: 60;
 }
 
 .header-left, .header-right {
@@ -110,6 +110,78 @@ header {
     font-weight: 700;
     color: var(--pink-dark);
     letter-spacing: -0.5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.logo:active {
+    transform: scale(0.95);
+}
+
+/* Petal stop button — hidden until petals are active */
+.petal-stop-btn {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    position: relative;
+    z-index: 61;
+}
+
+.petal-stop-btn.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.petal-stop-btn.visible:hover {
+    transform: scale(1.1);
+    background: var(--pink-light);
+}
+
+.petal-stop-btn.visible:active {
+    transform: scale(0.9);
+}
+
+/* ============================================================
+   ROSE PETALS
+   ============================================================ */
+
+.petal-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 50;
+}
+
+.petal {
+    position: absolute;
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+.petal-inner {
+    width: 100%;
+    height: 100%;
+    animation: petalTumble var(--spin-duration, 3s) ease-in-out infinite;
+}
+
+.petal-shape {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% 0 50% 50%;
+    transform: rotate(-45deg);
+    box-shadow: inset 1px -1px 3px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes petalTumble {
+    0%   { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg); }
+    25%  { transform: rotateX(50deg)  rotateY(30deg)  rotateZ(90deg); }
+    50%  { transform: rotateX(-30deg) rotateY(-50deg) rotateZ(180deg); }
+    75%  { transform: rotateX(40deg)  rotateY(20deg)  rotateZ(270deg); }
+    100% { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(360deg); }
 }
 
 .icon-btn {
@@ -454,14 +526,36 @@ header {
     background: var(--white);
     color: var(--text-light);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* Fill bar behind the text */
+.hint-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--hint-fill, 0%);
+    background: var(--pink-soft);
+    border-radius: 24px;
+    transition: width 0.4s ease;
+    z-index: -1;
 }
 
 .hint-button:disabled {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: default;
+}
+
+/* When partially filled (1 word toward hint) */
+.hint-button.filling {
+    border-color: var(--pink-medium);
 }
 
 .hint-button.has-hints {
@@ -471,17 +565,20 @@ header {
     animation: gentlePulse 2s ease infinite;
 }
 
+.hint-button.has-hints::before {
+    display: none;
+}
+
 .hint-button.has-hints:hover {
     background: var(--pink-dark);
 }
 
-.hint-button:hover:not(:disabled) {
-    background: var(--pink-light);
+.hint-button:hover:not(:disabled):not(.has-hints) {
     border-color: var(--pink-medium);
 }
 
 .hint-button:active:not(:disabled) {
-    background: var(--pink-soft);
+    transform: scale(0.96);
 }
 
 .progress {
